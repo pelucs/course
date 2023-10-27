@@ -10,10 +10,10 @@ export async function userRoutes(app: FastifyInstance){
     const bodySchema = z.object({
       name: z.string(),
       email: z.string().email(),
-      numberPhone: z.string(),
+      password: z.string(),
     });
 
-    const { name, email, numberPhone } = bodySchema.parse(req.body);
+    const { name, email, password } = bodySchema.parse(req.body);
 
     let user = await prisma.user.findUnique({
       where: {
@@ -29,7 +29,7 @@ export async function userRoutes(app: FastifyInstance){
       data: {
         name,
         email,
-        numberPhone,
+        password,
       }
     });
 
@@ -61,4 +61,64 @@ export async function userRoutes(app: FastifyInstance){
 
     return user;
   });
+
+  //Atualizando dados do usuário
+  app.put("/users/:id", async (req) => {
+
+    const paramsSchema = z.object({
+      id: z.string()
+    });
+
+    const { id } = paramsSchema.parse(req.params);
+    
+    const bodySchema = z.object({
+      name: z.string(),
+      numberPhone: z.string(),
+      bio: z.string()
+    });
+
+    const { name, bio, numberPhone } = bodySchema.parse(req.body);
+
+    const user = await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+        bio,
+        numberPhone,
+      }
+    });
+
+    return user;
+  });
+
+  //Efetuando login
+  app.post("/signin", async (req, reply) => {
+
+    const bodySchema = z.object({
+      email: z.string(),
+      password: z.string(),
+    });
+
+    const { email, password } = bodySchema.parse(req.body);
+
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+        password,
+      }
+    });
+
+    if(!user){
+      return reply.status(404).send("Email e/ou senha incorreto(s)");
+    }
+
+    const token = app.jwt.sign(
+      { id: user.id }, 
+      { sub: user.id, expiresIn: '30 days' }
+    );
+
+    return token;
+  })
 }

@@ -1,12 +1,13 @@
 import ptBR from 'date-fns/locale/pt-BR';
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { UpdateProfile } from './UpdateProfile';
+import { Button } from "@/components/ui/button";
 import { Header } from "../HeaderApp";
 import { Sidebar } from "../Sidebar";
-import { Button } from "@/components/ui/button";
-import { Pencil, Plus } from "lucide-react";
-import { api } from "@/api/api";
+import { Plus } from "lucide-react";
 import { format } from "date-fns";
+import { api } from "@/api/api";
 
 export default async () => {
 
@@ -23,10 +24,16 @@ export default async () => {
           <div className="h-full flex items-start gap-5">
             <div className="w-full max-w-xs">
               <div className="flex items-center flex-col rounded bg-secondary/50">
-                <Avatar className="w-32 h-32 mt-8 border-4 border-violet-500">
-                  <AvatarImage src={user.data.profileUrl}/>
-                  <AvatarFallback>PL</AvatarFallback>
-                </Avatar>
+                <div>
+                  <label htmlFor="updateProfile" className="cursor-pointer">
+                    <Avatar className="w-32 h-32 mt-8 border-4 border-violet-500">
+                      <AvatarImage src={user.data.profileUrl}/>
+                      <AvatarFallback>PL</AvatarFallback>
+                    </Avatar>
+                  </label>
+
+                  <input id="updateProfile" type="file" className="hidden"/>
+                </div>
 
                 <h1 className="mt-5 text-2xl font-semibold">
                   {user.data.name}
@@ -41,11 +48,7 @@ export default async () => {
                 </span>
               </div>
               
-              <Button className="mt-5 w-full">
-                <Pencil className="w-4 h-4 mr-2"/>
-
-                Editar perfil
-              </Button>
+              <UpdateProfile user={user.data}/>
             </div>
 
             <div className="flex-1 flex flex-col gap-5">

@@ -1,42 +1,84 @@
+import { api } from "@/api/api";
 import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import z from 'zod';
+
+const signinSchema = z.object({
+  email: z.string().email().nonempty("*Campo obrigatório"),
+  password: z.string().nonempty("*Campo obrigatório")
+});
+
+type SigninFormData = z.infer<typeof signinSchema>;
 
 export function LoginForm(){
+
+  const { register, handleSubmit, formState: { errors } } = useForm<SigninFormData>({
+    resolver: zodResolver(signinSchema)
+  });
+
+  const signin = async (data: SigninFormData) => {
+    await api.post("/signin", {
+      email: data.email,
+      password: data.password,
+    })
+    .then((res) => {
+      const expireTokenInSeconds = 60 * 60 * 24 * 30;
+
+      document.cookie = `token=${res.data}; Path=/app; max-age=${expireTokenInSeconds};`   
+      window.location.pathname = "/app"
+    })
+    .catch(error => console.log(error))
+  }
+
   return(
-    <form className="space-y-4">
+    <form onSubmit={handleSubmit(signin)} className="space-y-4">
       <div className="flex flex-col gap-1">
         <label 
-          htmlFor=""
+          htmlFor="email"
           className="text-xs uppercase text-muted-foreground font-semibold"
         >
           Email
         </label>
         
         <input
-          placeholder="Nome completo"
+          id="email"
+          {...register("email")}
+          placeholder="Informe seu email"
           className="w-full py-2 px-3 border bg-transparent text-sm rounded hover:border-violet-500 transition-colors"
         />
+
+        {errors.email && (
+          <span className="mt-1 text-xs text-red-500">{errors.email.message}</span>
+        )}
       </div>
 
       <div className="flex flex-col gap-1">
         <label 
-          htmlFor=""
+          htmlFor="password"
           className="text-xs uppercase text-muted-foreground font-semibold"
         >
           Senha
         </label>
         
         <input
+          id="password"
           type="password"
+          {...register("password")}
           placeholder="Informe uma senha"
           className="w-full py-2 px-3 border bg-transparent text-sm rounded hover:border-violet-500 transition-colors"
         />
+
+        {errors.password && (
+          <span className="mt-1 text-xs text-red-500">{errors.password.message}</span>
+        )}
       </div>
 
       <span className="mt-5 block text-sm text-violet-500">
         Esqueceu a senha?
       </span>
 
-      <Button className="w-full py-5 text-white bg-violet-500 hover:bg-violet-600">
+      <Button type="submit" className="w-full py-5 text-white bg-violet-500 hover:bg-violet-600">
         Entrar
       </Button>
     </form>

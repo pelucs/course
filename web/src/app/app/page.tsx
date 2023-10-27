@@ -2,9 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Header } from "./HeaderApp";
 import { Sidebar } from "./Sidebar";
 import { ChevronRight, Library } from "lucide-react";
+import { cookies } from "next/headers";
 import Link from "next/link";
+import { api } from "@/api/api";
 
-export default () => {
+export default async () => {
   return(
     <div className="flex relative">
       <Sidebar/>
