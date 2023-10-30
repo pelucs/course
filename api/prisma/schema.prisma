@@ -20,3 +20,36 @@ model User {
 
   createAt DateTime @default(now())
 }
+
+model Teacher {
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  profession String
+  profileUrl String
+
+  Lesson Lesson[]
+}
+
+model Module {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  slug        String
+  description String
+
+  lesson Lesson[]
+}
+
+model Lesson {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  slug        String
+  video       String
+  material    String
+
+  teacherId String  @db.ObjectId
+  teacher   Teacher @relation(fields: [teacherId], references: [id])
+
+  Module   Module? @relation(fields: [moduleId], references: [id])
+  moduleId String? @db.ObjectId
+}
