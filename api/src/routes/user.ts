@@ -1,5 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { prisma } from "../lib/prisma";
+import bcrypt from 'bcrypt';
 import z from 'zod';
 
 export async function userRoutes(app: FastifyInstance){
@@ -13,27 +14,36 @@ export async function userRoutes(app: FastifyInstance){
       password: z.string(),
     });
 
-    const { name, email, password } = bodySchema.parse(req.body);
+    try{
+      const { name, email, password } = bodySchema.parse(req.body);
 
-    let user = await prisma.user.findUnique({
-      where: {
-        email
+      let user = await prisma.user.findUnique({
+        where: {
+          email
+        }
+      });
+
+      if(user){
+        return reply.status(400).send("Email já cadastrado")
       }
-    });
 
-    if(user){
-      return reply.status(400).send("Email já cadastrado")
+      const hash = await bcrypt.hash(password, 10);
+
+      user = await prisma.user.create({
+        data: {
+          name,
+          email,
+          password: hash,
+        }
+      });
+
+      return user;
+
+    } catch(error) {
+      console.log("Error", error);
+
+      return reply.status(500).send("Erro ao criar o usuário.")
     }
-
-    user = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password,
-      }
-    });
-
-    return user;
   });
 
   //Resgatando todos usuários
@@ -94,31 +104,55 @@ export async function userRoutes(app: FastifyInstance){
   });
 
   //Efetuando login
-  app.post("/signin", async (req, reply) => {
+  app.post("/login", async (req, reply) => {
 
     const bodySchema = z.object({
       email: z.string(),
       password: z.string(),
     });
 
-    const { email, password } = bodySchema.parse(req.body);
-
-    const user = await prisma.user.findUnique({
-      where: {
-        email,
-        password,
+    try {
+      const { email, password } = bodySchema.parse(req.body);
+  
+      // Verificando se existe um usuário com este email
+      const user = await prisma.user.findUnique({
+        where: {
+          email,
+        }
+      });
+  
+      if (!user) {
+        return reply.status(404).send("Usuário não encontrado!");
       }
-    });
+  
+      // Comparar a senha enviada do usuário com o hash do banco de dados
+      const comparePassword = await bcrypt.compare(password, user.password);
+  
+      if (comparePassword) {
 
-    if(!user){
-      return reply.status(404).send("Email e/ou senha incorreto(s)");
+        const token = app.jwt.sign(
+          { id: user.id }, 
+          { sub: user.id, expiresIn: '30 days' }
+        );
+  
+        console.log("Senha correta. Usuário logado!");
+  
+        // Retorna o token para o cliente
+        reply.status(200).send({ token });
+        
+      } else {
+
+        console.log("Senha incorreta!");
+        // Retorna uma resposta de erro para o cliente
+        reply.status(401).send("Senha incorreta!");
+
+      }
+    } catch (error) {
+
+      console.error("Erro:", error);
+      // Retorna uma resposta de erro para o cliente
+      reply.status(500).send("Erro durante o login!");
+
     }
-
-    const token = app.jwt.sign(
-      { id: user.id }, 
-      { sub: user.id, expiresIn: '30 days' }
-    );
-
-    return token;
   })
 }

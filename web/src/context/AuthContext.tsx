@@ -1,19 +1,32 @@
-// import { api } from "@/api/api";
-// import { ReactNode, createContext, useEffect } from "react";
+import { api } from "@/api/api";
+import { UserTypes } from "@/utils/userTypes";
+import { ReactNode, createContext, useEffect, useState } from "react";
 
-// interface AuthContextProviderChildren{
-//   children: ReactNode;
-// }
+interface AuthContextProviderChildren{
+  children: ReactNode;
+}
 
-// export const AuthContext = createContext();
+interface AuthContextProps{
+  user: UserTypes;
+}
 
-// export function AuthContextProvider({ children }: AuthContextProviderChildren){
+export const AuthContext = createContext({} as AuthContextProps);
 
-  
+export function AuthContextProvider({ children }: AuthContextProviderChildren){
 
-//   return(
-//     <AuthContext.Provider value={}>
-//       {children}
-//     </AuthContext.Provider>
-//   )
-// }
+  const [user, setUser] = useState<UserTypes | null>(null);
+
+  useEffect(() => {
+
+    const fetch = async () => {
+      
+    }
+
+  }, []);
+
+  return(
+    <AuthContext.Provider value={{ user }}>
+      {children}
+    </AuthContext.Provider>
+  )
+}

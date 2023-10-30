@@ -3,10 +3,10 @@
 import { Logo } from "@/components/Logo";
 import { useEffect, useState } from "react";
 import { Separator } from "@/components/ui/separator";
-import { MoveLeft } from "lucide-react";
-import clsx from "clsx";
-import Link from "next/link";
+import { MoveRight } from "lucide-react";
 import { LoginForm } from "./LoginForm";
+import Link from "next/link";
+import clsx from "clsx";
 
 export default () => {
 
@@ -48,9 +48,9 @@ export default () => {
         </p>
 
         <Link href="/signup" className="flex items-center gap-2 text-violet-500">
-          <MoveLeft className="w-4 h-5"/>
-
           Criar conta
+
+          <MoveRight className="w-4 h-5"/>
         </Link>
       </div>
     </div>

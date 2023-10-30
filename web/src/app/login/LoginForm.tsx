@@ -4,29 +4,29 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from 'zod';
 
-const signinSchema = z.object({
+const loginSchema = z.object({
   email: z.string().email().nonempty("*Campo obrigatório"),
   password: z.string().nonempty("*Campo obrigatório")
 });
 
-type SigninFormData = z.infer<typeof signinSchema>;
+type LoginFormData = z.infer<typeof loginSchema>;
 
 export function LoginForm(){
 
-  const { register, handleSubmit, formState: { errors } } = useForm<SigninFormData>({
-    resolver: zodResolver(signinSchema)
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema)
   });
 
-  const signin = async (data: SigninFormData) => {
-    await api.post("/signin", {
+  const signin = async (data: LoginFormData) => {
+    await api.post("/login", {
       email: data.email,
       password: data.password,
     })
     .then((res) => {
       const expireTokenInSeconds = 60 * 60 * 24 * 30;
 
-      document.cookie = `token=${res.data}; Path=/app; max-age=${expireTokenInSeconds};`   
-      window.location.pathname = "/app"
+      document.cookie = `token=${res.data.token}; Path=/app; max-age=${expireTokenInSeconds};`   
+      window.location.pathname = "/app";
     })
     .catch(error => console.log(error))
   }
