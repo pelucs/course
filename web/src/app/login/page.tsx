@@ -15,7 +15,7 @@ export default () => {
   useEffect(() => setActive(true), []);
 
   return(
-    <div className={clsx("w-full h-screen flex items-center justify-center gap-20 relative duration-500 transition-all", {
+    <div className={clsx("w-full min-h-screen py-10 px-5 flex flex-col-reverse md:flex-row items-start md:items-center justify-center gap-20 relative duration-500 transition-all", {
       "translate-x-0 opacity-100": active,
       "-translate-x-10 opacity-0": !active
     })}>

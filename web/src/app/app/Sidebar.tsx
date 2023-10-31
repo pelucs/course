@@ -3,10 +3,11 @@
 import clsx from "clsx";
 import Link from "next/link";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Home, User, Library, BadgeCheck, Settings, Headphones, LogOut, Send, ChevronsRight } from "lucide-react";
+import { AuthContext } from "@/context/AuthContext";
 
 export function Sidebar(){
 
