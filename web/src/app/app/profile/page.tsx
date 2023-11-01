@@ -8,10 +8,14 @@ import { Sidebar } from "../Sidebar";
 import { Plus } from "lucide-react";
 import { format } from "date-fns";
 import { api } from "@/api/api";
+import { getUser } from '@/lib/auth';
+import { UserTypes } from '@/utils/userTypes';
 
 export default async () => {
 
-  const user = await api.get(`/users/653b3cb10f60d4f3e81c1aa5`);
+  const { sub } = getUser();
+
+  const user: UserTypes = (await api.get(`/users/${sub}`)).data;
 
   return(
     <div className="flex relative">
@@ -27,8 +31,8 @@ export default async () => {
                 <div>
                   <label htmlFor="updateProfile" className="cursor-pointer">
                     <Avatar className="w-32 h-32 mt-8 border-4 border-violet-500">
-                      <AvatarImage src={user.data.profileUrl}/>
-                      <AvatarFallback>PL</AvatarFallback>
+                      <AvatarImage src={user.profileUrl}/>
+                      <AvatarFallback className="text-4xl font-bold">{user.name.split('')[0]}</AvatarFallback>
                     </Avatar>
                   </label>
 
@@ -36,19 +40,19 @@ export default async () => {
                 </div>
 
                 <h1 className="mt-5 text-2xl font-semibold">
-                  {user.data.name}
+                  {user.name}
                 </h1>
 
                 <span className="text-sm text-muted-foreground">
-                  {user.data.email}
+                  {user.email}
                 </span>
 
                 <span className="w-full mt-14 py-5 flex items-center justify-center border-t text-sm uppercase font-semibold text-muted-foreground">
-                  Membro desde: {format(new Date(user.data.createAt), "MMMM, Y", { locale: ptBR })}
+                  Membro desde: {format(new Date(user.createAt), "MMMM, Y", { locale: ptBR })}
                 </span>
               </div>
               
-              <UpdateProfile user={user.data}/>
+              <UpdateProfile user={user}/>
             </div>
 
             <div className="flex-1 flex flex-col gap-5">
@@ -57,8 +61,8 @@ export default async () => {
                   Sobre mim
                 </h1>
 
-                {user.data.bio ? (
-                  <p>{user.data.bio}</p>
+                {user.bio ? (
+                  <p>{user.bio}</p>
                 ) : (
                   <span className="text-sm text-muted-foreground">Adicione uma biografia para seu perfil.</span>
                 )}
@@ -70,7 +74,7 @@ export default async () => {
                   Redes sociais
                 </h1>
 
-                {user.data.socials.length > 0 ? (
+                {user.socials.length > 0 ? (
                   <div className="flex items-center gap-3">
                     <div className="w-14 h-14 rounded bg-secondary"/>
                     <div className="w-14 h-14 rounded bg-secondary"/>

@@ -131,7 +131,7 @@ export async function userRoutes(app: FastifyInstance){
       if (comparePassword) {
 
         const token = app.jwt.sign(
-          { id: user.id }, 
+          { name: user.name, profileUrl: user.profileUrl }, 
           { sub: user.id, expiresIn: '30 days' }
         );
   

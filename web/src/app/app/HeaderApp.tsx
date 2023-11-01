@@ -1,10 +1,14 @@
 import { ButtonTheme } from "@/components/Theme";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { getUser } from "@/lib/auth";
 import { Search, UserPlus } from "lucide-react";
 import Link from "next/link";
 
 export function Header(){
+
+  const { name, profileUrl } = getUser();
+
   return(
     <div className="w-full h-16 px-7 flex sticky top-0 z-10 items-center justify-between border-b bg-background">
       <div>
@@ -24,8 +28,8 @@ export function Header(){
 
         <Link href="/app/profile">
           <Avatar>
-            <AvatarImage src="https://github.com/pelucs.png"/>
-            <AvatarFallback>PL</AvatarFallback>
+            <AvatarImage src={profileUrl}/>
+            <AvatarFallback>{name.split('')[0]}</AvatarFallback>
           </Avatar>
         </Link>
       </div>

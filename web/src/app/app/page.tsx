@@ -3,10 +3,11 @@ import { Header } from "./HeaderApp";
 import { Sidebar } from "./Sidebar";
 import { ChevronRight, Library } from "lucide-react";
 import Link from "next/link";
+import { getUser } from "@/lib/auth";
 
 export default async () => {
 
-  console.log("OI")
+  const { name } = getUser();
 
   return(
     <div className="flex relative">
@@ -19,7 +20,7 @@ export default async () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
               <h1 className="text-4xl font-bold">
-                Olá, Pedro
+                Olá, {name.split(' ')[0]}
               </h1>
 
               <p className="text-muted-foreground">
