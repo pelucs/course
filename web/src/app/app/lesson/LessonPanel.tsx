@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { BadgeCheck, CheckCircle, Library, PlayCircle } from "lucide-react";
+import { BadgeCheck, CheckCircle, Library, Play, PlayCircle } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
 
@@ -50,17 +50,25 @@ export function LessonPanel(){
       </div>
 
       <div className="mt-5 space-y-2">
-        {lessons.map(lesson => (
+        {lessons.map((lesson, i) => (
           <Link 
             href="" 
             key={lesson.name} 
             className="p-4 flex flex-col gap-4 rounded border hover:bg-secondary hover:border-violet-500 transition-colors"
           >
-            <span className="w-fit px-2 py-1 flex items-center gap-1 rounded bg-green-500/30 text-green-500 text-xs uppercase">
-              <CheckCircle className="w-4 h-4"/>
+            {i === 0 ? (
+              <span className="w-fit px-2 py-1 flex items-center gap-1 rounded bg-secondary text-xs uppercase">
+                <Play className="w-4 h-4"/>
 
-              Concluída
-            </span>
+                Assistindo
+              </span>
+            ) : (
+              <span className="w-fit px-2 py-1 flex items-center gap-1 rounded bg-green-500/30 text-green-500 text-xs uppercase">
+                <CheckCircle className="w-4 h-4"/>
+
+                Concluída
+              </span>
+            )}
 
             <div className="flex items-center justify-between gap-2">
               <h1 title={lesson.name} className="whitespace-nowrap text-ellipsis overflow-x-hidden">

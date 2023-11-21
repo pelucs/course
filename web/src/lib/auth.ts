@@ -1,18 +1,17 @@
 import { cookies } from 'next/headers';
 const jwt = require('jsonwebtoken');
-
 interface User{
+  sub: string;
   name: string;
   profileUrl: string;
-  sub: string;
 }
 
-export function getUser(): User{
+export function getUser(): User | null{
 
   const token = cookies().get("token")?.value;
 
   if(!token){
-    throw new Error("Unauthenticated")
+    return null
   }
 
   function decodificarToken(tokenUser: string, chaveSecreta: string) {

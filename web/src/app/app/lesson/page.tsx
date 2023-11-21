@@ -16,7 +16,9 @@ export default () => {
           <div className="flex-1">
             <div className="bg-secondary flex justify-center">
               <div className="h-full w-full max-w-[1100px] max-h-[60vh] aspect-video">
-                <video src="/test.mp4" controls className="w-full"/>
+                <video controls controlsList="nodownload" className="w-full">
+                  <source src="/test.mp4" type="video/mp4"/>
+                </video>
               </div>
             </div>
 

@@ -4,10 +4,11 @@ import * as Dialog from "@radix-ui/react-dialog"
 
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
-import { useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { api } from "@/api/api";
 import { Separator } from "@/components/ui/separator";
 import clsx from "clsx";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface UpdateProfileProps{
   user: any
@@ -18,6 +19,7 @@ export function UpdateProfile({ user }: UpdateProfileProps){
   const [name, setName] = useState<string>(user.name);
   const [numberPhone, setNumberPhone] = useState<string>(user.numberPhone);
   const [bio, setBio] = useState<string>("");
+  const [profileUrl, setProfileUrl] = useState<string>("");
 
   const updateProfile = async () => {
     if(name.length !== 0 && numberPhone.length !== 0){
@@ -25,10 +27,25 @@ export function UpdateProfile({ user }: UpdateProfileProps){
         name,
         bio,
         numberPhone,
+        profileUrl,
       })
       .then(() => {
         alert("Atualizado com sucesso!")
       })
+    }
+  }
+
+  const handleImageProfile = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if(file){
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        setProfileUrl(reader.result as string);
+      };
+
+      reader.readAsDataURL(file);
     }
   }
 
@@ -43,10 +60,10 @@ export function UpdateProfile({ user }: UpdateProfileProps){
       </Dialog.Trigger>
 
       <Dialog.Portal>
-        <Dialog.Overlay className="w-full h-screen fixed inset-0 bg-background/50 backdrop-blur-sm"/>
+        <Dialog.Overlay className="w-full h-screen fixed inset-0 z-50 bg-background/50 backdrop-blur-sm"/>
 
         <Dialog.Content className="w-full max-w-lg py-6 px-7 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
-        border rounded-md bg-background">
+        z-50 border rounded-md bg-background space-y-5">
           <div>
             <h1 className="font-semibold text-2xl">
               Meu perfil
@@ -57,7 +74,35 @@ export function UpdateProfile({ user }: UpdateProfileProps){
             </span>
           </div>
 
-          <Separator className="my-5"/>
+          <Separator/>
+
+          <div className="flex items-center gap-4">
+            <Avatar className="w-16 h-16 border-2 border-violet-500">
+              <AvatarImage src={user.profileUrl || profileUrl}/>
+              <AvatarFallback className="text-2xl font-bold">
+                {user.name.split('')[0]}
+              </AvatarFallback>
+            </Avatar>
+
+            <div>
+              <h1 className="font-bold">
+                Foto de perfil
+              </h1>
+
+              <Button asChild className="h-8 mt-2 cursor-pointer">
+                <label htmlFor="updateProfile">
+                  Escolher imagem
+                </label>
+              </Button>
+            </div>
+
+            <input 
+              type="file" 
+              id="updateProfile" 
+              className="hidden"
+              onChange={handleImageProfile}
+            />
+          </div>
           
           <div className="space-y-5">
             <div className="grid grid-cols-2 gap-2">

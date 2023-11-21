@@ -13,9 +13,18 @@ import { UserTypes } from '@/utils/userTypes';
 
 export default async () => {
 
-  const { sub } = getUser();
+  const currentUser = getUser();
 
-  const user: UserTypes = (await api.get(`/users/${sub}`)).data;
+  if(!currentUser){
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  
+  const user: UserTypes = (await api.get(`/users/${currentUser.sub}`)).data;
 
   return(
     <div className="flex relative">
@@ -28,16 +37,10 @@ export default async () => {
           <div className="h-full flex items-start gap-5">
             <div className="w-full max-w-xs">
               <div className="flex items-center flex-col rounded bg-secondary/50">
-                <div>
-                  <label htmlFor="updateProfile" className="cursor-pointer">
-                    <Avatar className="w-32 h-32 mt-8 border-4 border-violet-500">
-                      <AvatarImage src={user.profileUrl}/>
-                      <AvatarFallback className="text-4xl font-bold">{user.name.split('')[0]}</AvatarFallback>
-                    </Avatar>
-                  </label>
-
-                  <input id="updateProfile" type="file" className="hidden"/>
-                </div>
+                <Avatar className="w-32 h-32 mt-8 border-4 border-violet-500">
+                  <AvatarImage src={user.profileUrl}/>
+                  <AvatarFallback className="text-4xl font-bold">{user.name.split('')[0]}</AvatarFallback>
+                </Avatar>
 
                 <h1 className="mt-5 text-2xl font-semibold">
                   {user.name}

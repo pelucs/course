@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { CreateAccount } from "./CreateAccount";
 import { Logo } from "@/components/Logo";
 import { Separator } from "@/components/ui/separator";
-import { MoveLeft, MoveRight } from "lucide-react";
+import { Home, MoveLeft, MoveRight } from "lucide-react";
 import Link from "next/link";
 import clsx from 'clsx';
 
@@ -31,11 +31,20 @@ export default () => {
           Junte-se a comunidade e desenvolva seus conhecimentos em design.
         </p>
 
-        <Link href="/login" className="flex items-center gap-2 text-violet-500">
-          Fazer login
+        <div className="flex items-center gap-10">
+          <Link href="/" className="flex items-center gap-2">
+            <Home className="w-4 h-4"/>
 
-          <MoveRight className="w-4 h-5"/>
-        </Link>
+            Voltar ao início
+          </Link>
+
+          <Link href="/login" className="py-2 px-3 border border-violet-700 rounded flex items-center gap-2
+          hover:bg-violet-500 transition-colors hover:text-white">
+            Fazer login
+
+            <MoveRight className="w-4 h-5"/>
+          </Link>
+        </div>
       </div>
 
       <div className="w-full max-w-md p-6 bg-secondary/50 rounded-md"> 

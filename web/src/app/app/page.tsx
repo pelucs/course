@@ -2,8 +2,9 @@ import { Button } from "@/components/ui/button";
 import { Header } from "./HeaderApp";
 import { Sidebar } from "./Sidebar";
 import { ChevronRight, Library } from "lucide-react";
-import Link from "next/link";
 import { getUser } from "@/lib/auth";
+import { SlideBanners } from "./SlideBanners";
+import Link from "next/link";
 
 export default async () => {
 
@@ -64,9 +65,7 @@ export default async () => {
 
             </div>
 
-            <div className="h-[30vh] bg-secondary rounded">
-
-            </div>
+            <SlideBanners/>
           </div>
         </div>
       </div>
