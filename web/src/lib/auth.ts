@@ -1,19 +1,20 @@
 import { cookies } from 'next/headers';
 const jwt = require('jsonwebtoken');
-interface User{
+
+interface User {
   sub: string;
   name: string;
   profileUrl: string;
 }
 
-export function getUser(): User | null{
-
+export function getUser(): User{
   const token = cookies().get("token")?.value;
 
   if(!token){
-    return null
+    throw new Error('Unauthenticated')
   }
 
+  //Função para decodificar
   function decodificarToken(tokenUser: string, chaveSecreta: string) {
     try {
       const decoded = jwt.verify(tokenUser, chaveSecreta);
@@ -26,10 +27,6 @@ export function getUser(): User | null{
 
   // Chamando a função para decodificar o token
   const payloadDecodificado = decodificarToken(token, 'design-pro');
-
-  if(!payloadDecodificado){
-    console.log("Error", payloadDecodificado)
-  }
 
   return payloadDecodificado;
 }

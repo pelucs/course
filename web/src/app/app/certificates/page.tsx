@@ -1,6 +1,8 @@
 import { BadgeCheck, Eye } from "lucide-react";
-import { Header } from "../HeaderApp";
+import { HeaderApp } from "../HeaderApp";
 import { Sidebar } from "../Sidebar";
+import { cookies } from "next/headers";
+import { RedirectClient } from "@/components/RedirectClient";
 import Link from "next/link";
 
 const modules = [
@@ -9,12 +11,19 @@ const modules = [
 ]
 
 export default () => {
+
+  const isAuthenticated = cookies().has('token');
+
+  if(!isAuthenticated){
+    return <RedirectClient to="/login"/>
+  }
+
   return(
     <div className="flex relative">
       <Sidebar/>
 
       <div className="flex-1">
-        <Header/>
+        <HeaderApp/>
 
         <div className="p-7">
           <div>

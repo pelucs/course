@@ -1,12 +1,21 @@
 import { Button } from "@/components/ui/button";
-import { Header } from "./HeaderApp";
+import { HeaderApp } from "./HeaderApp";
 import { Sidebar } from "./Sidebar";
 import { ChevronRight, Library } from "lucide-react";
-import { getUser } from "@/lib/auth";
 import { SlideBanners } from "./SlideBanners";
+import { getUser } from "@/lib/auth";
+import { cookies } from 'next/headers';
+import { RedirectClient } from "@/components/RedirectClient";
+
 import Link from "next/link";
 
-export default async () => {
+export default () => {
+
+  const isAuthenticated = cookies().has('token');
+
+  if(!isAuthenticated){
+    return <RedirectClient to="/login"/>
+  }
 
   const { name } = getUser();
 
@@ -15,14 +24,16 @@ export default async () => {
       <Sidebar/>
 
       <div className="flex-1">
-        <Header/>
+        <HeaderApp/>
 
         <div className="flex-1 h-full p-7">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
-              <h1 className="text-4xl font-bold">
-                Olá, {name.split(' ')[0]}
-              </h1>
+              {name && name.trim() && (
+                <h1 className="text-4xl font-bold">
+                  Olá, {name.split(' ')[0]}
+                </h1>
+              )}
 
               <p className="text-muted-foreground">
                 É bom ter você de volta! <br/>

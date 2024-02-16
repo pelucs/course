@@ -25,7 +25,7 @@ export function LoginForm(){
     .then((res) => {
       const expireTokenInSeconds = 60 * 60 * 24 * 30;
 
-      document.cookie = `token=${res.data.token}; Path=/app; max-age=${expireTokenInSeconds};`   
+      document.cookie = `token=${res.data.token}; Path=/; max-age=${expireTokenInSeconds};`   
       window.location.pathname = "/app";
     })
     .catch(error => console.log(error))

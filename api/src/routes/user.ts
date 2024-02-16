@@ -1,5 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { prisma } from "../lib/prisma";
+
 import bcrypt from 'bcrypt';
 import z from 'zod';
 
@@ -17,6 +18,7 @@ export async function userRoutes(app: FastifyInstance){
     try{
       const { name, email, password } = bodySchema.parse(req.body);
 
+      //Verificando se já existe usuário cadastrado com o email
       let user = await prisma.user.findUnique({
         where: {
           email
@@ -24,11 +26,13 @@ export async function userRoutes(app: FastifyInstance){
       });
 
       if(user){
-        return reply.status(400).send("Email já cadastrado")
+        return reply.status(400).send("Email já cadastrado");
       }
 
+      //Criptografando a senha
       const hash = await bcrypt.hash(password, 10);
 
+      //Registrando o usuário no banco de dados
       user = await prisma.user.create({
         data: {
           name,

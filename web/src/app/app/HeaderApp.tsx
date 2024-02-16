@@ -1,13 +1,14 @@
+import { SearchComponent } from "@/components/Search";
 import { ButtonTheme } from "@/components/Theme";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { getUser } from "@/lib/auth";
-import { Search, UserPlus } from "lucide-react";
+import { UserCog, UserPlus } from "lucide-react";
 import Link from "next/link";
 
-export function Header(){
+export async function HeaderApp(){
 
-  const { name, profileUrl } = getUser();
+  const { name, profileUrl, sub } = getUser();
 
   return(
     <div className="w-full h-16 px-7 flex sticky top-0 z-10 items-center justify-between border-b bg-background">
@@ -16,15 +17,17 @@ export function Header(){
       </div>
 
       <div className="flex items-center gap-2">
-        <Button variant="secondary" className="w-10 h-10 p-0">
-          <Search className="w-4 h-4"/>
-        </Button>
+        <SearchComponent/>
 
         <ButtonTheme/>
 
-        <Button variant="secondary" className="w-10 h-10 p-0">
-          <UserPlus className="w-4 h-4"/>
-        </Button>
+        {sub === "65cd059f8535d1f7b1d77cf5" && (
+          <Button asChild variant="secondary" className="w-10 h-10 p-0">
+            <Link href="/app/admin">
+              <UserCog className="w-4 h-4"/>
+            </Link>
+          </Button>
+        )}
 
         <Link href="/app/profile">
           <Avatar>

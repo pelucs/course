@@ -1,14 +1,13 @@
 "use client"
 
-import * as Dialog from "@radix-ui/react-dialog"
-
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
 import { ChangeEvent, useEffect, useState } from "react";
 import { api } from "@/api/api";
 import { Separator } from "@/components/ui/separator";
-import clsx from "clsx";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Dialog, DialogClose, DialogContent, DialogOverlay, DialogPortal, DialogTrigger } from "@/components/ui/dialog";
+import clsx from "clsx";
 
 interface UpdateProfileProps{
   user: any
@@ -50,20 +49,20 @@ export function UpdateProfile({ user }: UpdateProfileProps){
   }
 
   return(
-    <Dialog.Root>
-      <Dialog.Trigger className="mt-5 w-full">
+    <Dialog>
+      <DialogTrigger className="mt-5 w-full">
         <Button className="w-full">
           <Pencil className="w-4 h-4 mr-2"/>
 
           Editar perfil
         </Button>
-      </Dialog.Trigger>
+      </DialogTrigger>
 
-      <Dialog.Portal>
-        <Dialog.Overlay className="w-full h-screen fixed inset-0 z-50 bg-background/50 backdrop-blur-sm"/>
+      <DialogPortal>
+        <DialogOverlay className="w-full h-screen fixed inset-0 z-50 bg-background/50"/>
 
-        <Dialog.Content className="w-full max-w-lg py-6 px-7 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
-        z-50 border rounded-md bg-background space-y-5">
+        <DialogContent className="w-full max-w-lg py-6 px-7 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
+        z-50 border rounded-md bg-background">
           <div>
             <h1 className="font-semibold text-2xl">
               Meu perfil
@@ -104,7 +103,7 @@ export function UpdateProfile({ user }: UpdateProfileProps){
             />
           </div>
           
-          <div className="space-y-5">
+          <div className="mt-5 space-y-5">
             <div className="grid grid-cols-2 gap-2">
               <div className="flex flex-col gap-1">
                 <label 
@@ -173,14 +172,14 @@ export function UpdateProfile({ user }: UpdateProfileProps){
               </Button>
 
               <Button variant="secondary" asChild className="py-4">
-                <Dialog.Close>
+                <DialogClose>
                   Cancelar
-                </Dialog.Close>
+                </DialogClose>
               </Button>
             </div>
           </div>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+        </DialogContent>
+      </DialogPortal>
+    </Dialog>
   );
 }

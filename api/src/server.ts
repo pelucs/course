@@ -1,4 +1,5 @@
 import { userRoutes } from './routes/user';
+import { teacherRoutes } from './routes/teacher';
 import { fastifyCors } from '@fastify/cors';
 
 import jwt from "@fastify/jwt";
@@ -15,6 +16,7 @@ app.register(jwt, {
 })
 
 app.register(userRoutes);
+app.register(teacherRoutes);
 
 app.listen({
   port: 3333

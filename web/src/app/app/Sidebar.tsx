@@ -3,24 +3,22 @@
 import clsx from "clsx";
 import Link from "next/link";
 
-import { useContext, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Home, User, Library, BadgeCheck, Settings, Headphones, LogOut, Send, ChevronsRight } from "lucide-react";
-import { AuthContext } from "@/context/AuthContext";
+import { LogoutButton } from "./Logout";
+import { useEffect, useState } from "react";
+import { Home, User, Library, BadgeCheck, Settings, Headphones, Send, ChevronsRight } from "lucide-react";
 
 export function Sidebar(){
 
   const [open, setOpen] = useState<boolean>(true);
 
   useEffect(() => {
-
     let path = window.location.pathname;
 
     if(path.includes("/lesson")){
       setOpen(false);
     }
-
   }, []);
 
   return(
@@ -197,20 +195,7 @@ export function Sidebar(){
           </div>
         </div>
 
-        <Button 
-          asChild 
-          variant="destructive" 
-          className={clsx("w-full transition-all", {
-            "justify-start gap-2 p-5": open,
-            "p-0": !open
-          })}
-        >
-          <Link href="">
-            <LogOut className="w-4 h-4"/>
-
-            {open && "Encerrar sessão"}
-          </Link>
-        </Button>
+        <LogoutButton open={open}/>
       </div>
     </div>
   );

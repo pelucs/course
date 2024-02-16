@@ -1,7 +1,9 @@
 import Link from "next/link";
-import { Header } from "../HeaderApp";
+import { HeaderApp } from "../HeaderApp";
 import { Sidebar } from "../Sidebar";
 import { Library, MoveRight, PlayCircle } from "lucide-react";
+import { cookies } from "next/headers";
+import { RedirectClient } from "@/components/RedirectClient";
 
 const modules = [
   { name: "Texturas", lessons: "10" },
@@ -13,12 +15,19 @@ const modules = [
 ]
 
 export default () => {
+
+  const isAuthenticated = cookies().has('token');
+
+  if(!isAuthenticated){
+    return <RedirectClient to="/login"/>
+  }
+
   return(
     <div className="flex relative">
       <Sidebar/>
 
       <div className="flex-1">
-        <Header/>
+        <HeaderApp/>
 
         <div className="w-full p-7">
           <Link href="" className="w-full px-4 py-3 flex items-center justify-between rounded-md bg-gradient-to-l 

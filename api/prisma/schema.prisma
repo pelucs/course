@@ -22,10 +22,12 @@ model User {
 }
 
 model Teacher {
-  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
   name       String
+  email      String  @unique
+  bio        String
+  profileUrl String?
   profession String
-  profileUrl String
 
   Lesson Lesson[]
 }

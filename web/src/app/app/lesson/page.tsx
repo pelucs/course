@@ -1,16 +1,25 @@
 import { Book, Headphones, Library, Send } from "lucide-react";
-import { Header } from "../HeaderApp";
+import { HeaderApp } from "../HeaderApp";
 import { Sidebar } from "../Sidebar";
 import { LessonPanel } from "./LessonPanel";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { cookies } from "next/headers";
+import { RedirectClient } from "@/components/RedirectClient";
 
 export default () => {
+
+  const isAuthenticated = cookies().has('token');
+
+  if(!isAuthenticated){
+    return <RedirectClient to="/login"/>
+  }
+
   return(
     <div className="flex min-h-screen">
       <Sidebar/>
 
       <div className="h-full flex-1 flex flex-col">
-        <Header/>
+        <HeaderApp/>
 
         <div className="flex h-full">
           <div className="flex-1">

@@ -1,5 +1,3 @@
-"use client"
-
 import { FAQ } from "./home/FAQ";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -17,8 +15,17 @@ import google from '../assets/google.svg';
 import doodle from '../assets/doodle.svg';
 import whatsapp from '../assets/whatsapp-logotipo.svg';
 import whatsappLogo from '../assets/whatsapp-logo.svg';
+import { RedirectClient } from "@/components/RedirectClient";
+import { cookies } from "next/headers";
 
 export default function Home() {
+
+  const isAuthenticated = cookies().has('token');
+
+  if(isAuthenticated){
+    return <RedirectClient to="/app"/>
+  }
+
   return (
     <main className="">
       <Header/>
@@ -26,17 +33,6 @@ export default function Home() {
       <Link href="/" className="w-12 h-12 rounded flex items-center justify-center bg-green-500 hover:bg-green-600
       transition-colors fixed bottom-5 right-5 z-10">
         <Image src={whatsappLogo} alt=""/>
-      </Link>
-
-      <Link href="" className="w-full px-4 py-3 flex items-center justify-center gap-2 bg-gradient-to-l 
-      to-violet-500 from-pink-500 hover:opacity-90 transition-all">
-        Confira as melhores condições para adquirir o plano anual.
-
-        <span className="flex underline items-center gap-2 font-bold">
-          Ver mais
-
-          <MoveRight className="w-4 h-4"/>
-        </span>
       </Link>
 
       <div className="flex flex-col items-center">
