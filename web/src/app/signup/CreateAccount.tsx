@@ -24,7 +24,7 @@ export function CreateAccount(){
   });
 
   const createUser = async (data: CreateUserFormData) => {
-    await api.post("/register", {
+    await api.post('/register', {
       name: data.name,
       email: data.email,
       password: data.password,
