@@ -2,6 +2,10 @@
 
 import clsx from "clsx";
 import Link from "next/link";
+import Image from "next/image";
+
+import logotipo from '../../../public/logotipo-advec.png';
+import logo from '../../../public/logo-advec.png';
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -46,15 +50,19 @@ export function Sidebar(){
           </Button> 
 
           <div className="w-full flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <span className="w-9 h-9 flex items-center justify-center rounded-md bg-violet-500">
-                D
-              </span>
-
-              {open && (
-                <h1 className="font-bold text-xl">
-                  DesignerPro
-                </h1>
+            <div>
+              {open ? (
+                <Image 
+                  alt="Logo Advec"
+                  className="w-[180px]"
+                  src={logotipo} 
+                />
+              ) : (
+                <Image 
+                  alt="Logo Advec"
+                  className="w-[350px]"
+                  src={logo} 
+                />
               )}
             </div>
 
